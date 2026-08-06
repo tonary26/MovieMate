@@ -6,7 +6,13 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            component: () => import('@/view/Dashboard.vue')
+            component: () => import('@/view/Dashboard.vue'),
+            name: 'dashboard'
+        },
+        {
+            path: '/user/profile',
+            component: () => import('@/view/Profile.vue'),
+            name: 'user.profile'
         }
     ]
 })

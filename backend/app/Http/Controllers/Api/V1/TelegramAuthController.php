@@ -38,6 +38,7 @@ class TelegramAuthController extends Controller
             ]
         );
 
+        $user->tokens()->delete();
         $token = $user->createToken('telegram-auth')->plainTextToken;
 
         return response()->json([
