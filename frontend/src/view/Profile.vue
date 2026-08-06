@@ -214,10 +214,6 @@ html, body {
   .stats-row {
     padding-bottom: 16px;
   }
-
-  .menu-item {
-    padding: 12px 0;
-  }
 }
 
 @media (max-width: 340px) {
