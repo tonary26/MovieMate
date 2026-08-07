@@ -1,7 +1,14 @@
 <script setup>
 import { useAuthStore } from "@/store/telegramAuth.js"
+import { useRoomStore } from "@/store/room.js"
+import { onMounted } from "vue"
 
 const authStore = useAuthStore()
+const roomStore = useRoomStore()
+
+onMounted(async () => {
+  await roomStore.getRooms()
+})
 </script>
 
 <template>
@@ -11,16 +18,35 @@ const authStore = useAuthStore()
       <h1>{{ authStore.user.name }}</h1>
       <p class="username">@{{ authStore.user.username }}</p>
     </div>
-
     <div class="stats-row">
       <div class="stat">
-        <span class="stat-value">24</span>
-        <span class="stat-label">фильма</span>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <span class="stat-value">6</span>
+        <span class="stat-value">{{ roomStore.rooms.length }}</span>
         <span class="stat-label">комнаты</span>
+      </div>
+    </div>
+
+    <div class="rooms-section">
+      <h2 class="section-title">мои комнаты</h2>
+      <div class="rooms-list">
+
+        <div class="room-card" v-for="room in roomStore.rooms" :key="room.id" v-if="roomStore.hasRooms">
+          <div class="room-thumb">
+            <img src="https://placehold.co/56x56" alt="room" />
+          </div>
+          <div class="room-info">
+            <span class="room-name">{{ room.movie_title }}</span>
+            <span class="room-meta">{{ room.users.length }} участника</span>
+          </div>
+          <span class="room-arrow">›</span>
+        </div>
+
+        <div class="rooms-empty" v-else>
+          <div class="empty-icon">🎬</div>
+          <p class="empty-title">пока нет комнат</p>
+          <p class="empty-subtitle">создай комнату и позови друзей смотреть кино вместе</p>
+          <button class="empty-btn">создать комнату</button>
+        </div>
+
       </div>
     </div>
 
@@ -118,10 +144,82 @@ const authStore = useAuthStore()
   font-size: 12px;
 }
 
-.stat-divider {
-  width: 1px;
-  height: 32px;
-  background: rgba(237, 227, 206, 0.12);
+.rooms-section {
+  padding: 0 clamp(16px, 5vw, 24px) 120px;
+  flex: 1;
+}
+
+.section-title {
+  color: #EDE3CE;
+  opacity: 0.4;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  margin: 0 0 12px;
+}
+
+.rooms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.room-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(242, 235, 221, 0.05);
+  border: 1px solid rgba(242, 235, 221, 0.1);
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.room-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(242, 235, 221, 0.08);
+}
+
+.room-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.room-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.room-name {
+  color: #EDE3CE;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: lowercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.room-meta {
+  color: #EDE3CE;
+  opacity: 0.4;
+  font-size: 12px;
+}
+
+.room-arrow {
+  color: #EDE3CE;
+  opacity: 0.3;
+  font-size: 20px;
+  flex-shrink: 0;
 }
 
 .pill-nav {
@@ -163,33 +261,75 @@ const authStore = useAuthStore()
   font-weight: 700;
 }
 
+.rooms-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px 16px;
+  background: rgba(242, 235, 221, 0.03);
+  border: 1px dashed rgba(242, 235, 221, 0.12);
+  border-radius: 16px;
+}
+
+.empty-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.empty-title {
+  color: #EDE3CE;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: lowercase;
+  margin: 0 0 4px;
+}
+
+.empty-subtitle {
+  color: #EDE3CE;
+  opacity: 0.4;
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0 0 20px;
+  max-width: 260px;
+}
+
+.empty-btn {
+  background: #EDE3CE;
+  color: #0A0A0A;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  cursor: pointer;
+}
+
 @media (max-height: 640px) {
   .profile-header {
     padding-top: 20px;
     padding-bottom: 16px;
   }
-
   .avatar {
     width: 64px;
     height: 64px;
     margin-bottom: 12px;
   }
-
   .profile-header h1 {
     font-size: 26px;
   }
-
   .stats-row {
     padding-bottom: 16px;
   }
 }
-
 @media (max-width: 340px) {
   .pill-item {
     font-size: 10px;
     padding: 9px 2px;
   }
-
   .stats-row {
     gap: 16px;
   }

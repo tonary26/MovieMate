@@ -7,12 +7,12 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::prefix('/v1')->group(function () {
+Route::middleware('throttle:api')->prefix('/v1')->group(function () {
     Route::prefix('/auth')->name('auth.')->group(function() {
         require __DIR__ . '/api/telegramAuth.php';
     });
 
-    Route::prefix('/rooms')->name('rooms')->group(function () {
+    Route::prefix('/rooms')->middleware('auth:sanctum')->name('rooms')->group(function () {
         require __DIR__.'/api/rooms.php';
     });
 });
