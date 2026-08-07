@@ -11,7 +11,6 @@
         НАЧАТЬ СМОТРЕТЬ
       </button>
     </div>
-
   </div>
 </template>
 

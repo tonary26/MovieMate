@@ -30,4 +30,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class);
+    }
 }

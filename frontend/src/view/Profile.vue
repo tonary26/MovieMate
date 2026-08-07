@@ -6,10 +6,6 @@ const authStore = useAuthStore()
 
 <template>
   <div class="screen">
-    <div class="eyebrow">
-      <span>MOVIEMATE</span>
-    </div>
-
     <div class="profile-header">
       <img class="avatar" :src="authStore.user.avatar" alt="avatar" />
       <h1>{{ authStore.user.name }}</h1>
@@ -26,11 +22,6 @@ const authStore = useAuthStore()
         <span class="stat-value">6</span>
         <span class="stat-label">комнаты</span>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <span class="stat-value">12</span>
-        <span class="stat-label">друга</span>
-      </div>
     </div>
 
     <nav class="pill-nav">
@@ -42,25 +33,7 @@ const authStore = useAuthStore()
   </div>
 </template>
 
-<style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
-  background: #0A0A0A;
-}
-
-#app {
-  height: 100%;
-}
-</style>
-
 <style scoped>
-* {
-  box-sizing: border-box;
-}
-
 .screen {
   width: 100%;
   max-width: 420px;
@@ -73,11 +46,6 @@ html, body {
   position: relative;
   background: #0A0A0A;
   font-family: 'Helvetica Neue', Arial, sans-serif;
-}
-
-.eyebrow {
-  padding: clamp(20px, 6vh, 32px) clamp(16px, 5vw, 24px) 0;
-  padding-top: max(clamp(20px, 6vh, 32px), env(safe-area-inset-top));
 }
 
 .eyebrow span {

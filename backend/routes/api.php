@@ -11,4 +11,8 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/auth')->name('auth.')->group(function() {
         require __DIR__ . '/api/telegramAuth.php';
     });
+
+    Route::prefix('/rooms')->name('rooms')->group(function () {
+        require __DIR__.'/api/rooms.php';
+    });
 });

@@ -1,12 +1,10 @@
 <script setup>
-
 </script>
 
 <template>
   <nav class="pill-nav">
     <router-link :to="{ name: 'dashboard' }" class="pill-item" exact-active-class="active">главная</router-link>
     <span class="pill-item">комнаты</span>
-    <span class="pill-item">друзья</span>
     <router-link :to="{ name: 'user.profile' }" class="pill-item" exact-active-class="active">профиль</router-link>
   </nav>
 </template>
