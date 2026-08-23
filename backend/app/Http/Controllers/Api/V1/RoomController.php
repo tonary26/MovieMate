@@ -11,7 +11,7 @@ class RoomController extends Controller
 {
     public function index()
     {
-        $rooms = auth()->user()->rooms()->with('owner')->get();
+        $rooms = auth()->user()->rooms()->with(['owner', 'members'])->get();
 
         return response()->json([
             'rooms' => $rooms
@@ -23,7 +23,7 @@ class RoomController extends Controller
         $data = $request->validated();
 
         $room = Room::create([
-            'invite_code' => Str::random(8),
+            'invite_code' => Str::random(6),
             'owner_id' => auth()->id(),
             'movie_title' => $data['movie_title'] ?? null
         ]);
@@ -34,5 +34,10 @@ class RoomController extends Controller
         return response()->json([
             'room' => $room
         ], 201);
+    }
+
+    public function join(Room $room)
+    {
+        
     }
 }

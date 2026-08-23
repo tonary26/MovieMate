@@ -1,10 +1,13 @@
 <script setup>
 import { useAuthStore } from "@/store/telegramAuth.js"
 import { useRoomStore } from "@/store/room.js"
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
+import Add from "@/view/rooms/Add.vue"
 
 const authStore = useAuthStore()
 const roomStore = useRoomStore()
+
+const isOpenModal = ref(false)
 
 onMounted(async () => {
   await roomStore.getRooms()
@@ -27,27 +30,29 @@ onMounted(async () => {
 
     <div class="rooms-section">
       <h2 class="section-title">мои комнаты</h2>
-      <div class="rooms-list">
 
-        <div class="room-card" v-for="room in roomStore.rooms" :key="room.id" v-if="roomStore.hasRooms">
-          <div class="room-thumb">
-            <img src="https://placehold.co/56x56" alt="room" />
-          </div>
-          <div class="room-info">
-            <span class="room-name">{{ room.movie_title }}</span>
-            <span class="room-meta">{{ room.users.length }} участника</span>
-          </div>
-          <span class="room-arrow">›</span>
-        </div>
+      <div class="rooms-list">
+       <template v-if="roomStore.hasRooms">
+         <div class="room-card" v-for="room in roomStore.rooms" :key="room.id">
+           <div class="room-thumb">
+             <img src="https://placehold.co/56x56" alt="room" />
+           </div>
+           <div class="room-info">
+             <span class="room-name">{{ room.movie_title }}</span>
+             <span class="room-meta">{{ room.users?.length ?? 0 }}  участника</span>
+           </div>
+           <span class="room-arrow">›</span>
+         </div>
+       </template>
 
         <div class="rooms-empty" v-else>
           <div class="empty-icon">🎬</div>
           <p class="empty-title">пока нет комнат</p>
           <p class="empty-subtitle">создай комнату и позови друзей смотреть кино вместе</p>
-          <button class="empty-btn">создать комнату</button>
+          <button @click="isOpenModal = true" class="empty-btn">создать комнату</button>
         </div>
-
       </div>
+
     </div>
 
     <nav class="pill-nav">
@@ -57,6 +62,9 @@ onMounted(async () => {
       <span class="pill-item active">профиль</span>
     </nav>
   </div>
+
+  <Add v-if="isOpenModal" @close="isOpenModal = false" />
+
 </template>
 
 <style scoped>

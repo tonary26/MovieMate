@@ -16,9 +16,9 @@ const router = createRouter({
         },
         {
             path: '/rooms',
-            component: () => import('@/view/Rooms.vue'),
+            component: () => import('@/view/rooms/Index.vue'),
             name: 'rooms.index'
-        }
+        },
     ]
 })
 

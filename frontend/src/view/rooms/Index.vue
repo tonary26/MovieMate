@@ -1,8 +1,11 @@
 <script setup>
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useRoomStore } from "@/store/room.js"
+import Add from "@/view/rooms/Add.vue"
 
 const roomStore = useRoomStore()
+
+const isOpenModal = ref(false)
 
 onMounted(async () => {
   await roomStore.getRooms()
@@ -14,7 +17,7 @@ onMounted(async () => {
 
     <div class="page-header">
       <h1>комнаты</h1>
-      <button class="btn-create">+ создать</button>
+      <button @click="isOpenModal = true" class="btn-create">+ создать</button>
     </div>
 
     <div class="rooms-section">
@@ -25,7 +28,7 @@ onMounted(async () => {
           </div>
           <div class="room-info">
             <span class="room-name">{{ room.movie_title || 'без названия' }}</span>
-            <span class="room-meta">{{ room.users?.length || 0 }} участника</span>
+            <span class="room-meta">{{ room.members?.length || 0 }} участника</span>
           </div>
           <span class="room-arrow">›</span>
         </div>
@@ -35,10 +38,14 @@ onMounted(async () => {
         <div class="empty-icon">🎬</div>
         <p class="empty-title">пока нет комнат</p>
         <p class="empty-subtitle">создай комнату и позови друзей смотреть кино вместе</p>
-        <button class="empty-btn">создать комнату</button>
+        <button @click="isOpenModal = true" class="empty-btn">создать комнату</button>
       </div>
+
     </div>
   </div>
+
+  <Add v-if="isOpenModal" @close="isOpenModal = false" />
+
 </template>
 
 <style scoped>
